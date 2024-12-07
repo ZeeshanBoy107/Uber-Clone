@@ -1,5 +1,5 @@
 const User = require("../models/user.model");
-const BlackListToken = require("../models/blackListToken.model");
+const BlackListToken = require("../models/blacklistToken.model");
 const { createUser } = require("../services/user.service");
 const { validationResult } = require("express-validator");
 
@@ -10,6 +10,11 @@ const registerUser = async (req, res, next) => {
   }
 
   const { fullname, email, password } = req.body;
+
+  const userExists = await User.findOne({ email });
+  if (userExists) {
+    return res.status(400).json({ message: "User already exists" });
+  }
 
   try {
     const user = await createUser({

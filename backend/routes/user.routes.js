@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { body } = require("express-validator")
 const { registerUser, loginUser, userProfile, logoutUser } = require("../Controllers/user.controller.js")
-const authUser = require("../middlewares/auth.middleware.js")
+const { authUser } = require("../middlewares/auth.middleware.js")
 
 router.post("/register", [
   body("fullname.firstname").isLength({min: 3}).withMessage("First name should be more than 3 letters long"),
