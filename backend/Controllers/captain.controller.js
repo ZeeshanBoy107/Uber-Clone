@@ -62,6 +62,7 @@ const loginCaptain = async (req, res) => {
     .status(200)
     .cookie("token", token, options)
     .json({ 
+      token: token,
       captain, 
       message: "User Logged Successfully" 
     });
