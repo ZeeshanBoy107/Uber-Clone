@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const UserSignup = () => {
   const [firstname, setFirstname] = useState("");
@@ -7,9 +9,12 @@ const UserSignup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const submitHandler = (e) => {
+  const navigate = useNavigate();
+
+  const submitHandler = async (e) => {
     e.preventDefault();
-    const userData = {
+    
+    const newUser = {
       fullname: {
         firstname: firstname,
         lastname: lastname,
@@ -17,6 +22,17 @@ const UserSignup = () => {
       email: email,
       password: password,
     };
+
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/users/register`,
+      newUser
+    );
+
+    if (response.status === 201) {
+      navigate("/login");
+    } else {
+      alert("Something went wrong");
+    }
 
     setFirstname("");
     setLastname("");
@@ -78,7 +94,7 @@ const UserSignup = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
             <button className="bg-black text-white rounded px-4 py-2 border w-full">
-              Login
+              Create Account
             </button>
           </form>
           <p className="mx-5 text-center mt-2">
