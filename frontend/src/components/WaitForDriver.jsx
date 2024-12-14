@@ -25,7 +25,7 @@ const WaitForDriver = (props) => {
              <div>
                <h3 className="text-lg font-medium">562/11-A</h3>
                <p className="text-base text-gray-600">
-                 Kankariya Talab, Ahmedabad
+               {props.pickup}
                </p>
              </div>
            </div>
@@ -34,14 +34,14 @@ const WaitForDriver = (props) => {
              <div>
                <h3 className="text-lg font-medium">562/11-A</h3>
                <p className="text-base text-gray-600">
-                 Kankariya Talab, Ahmedabad
+                 {props.destination}
                </p>
              </div>
            </div>
            <div className="flex items-center gap-3 p-3">
              <i className="ri-currency-line"></i>
              <div>
-               <h3 className="text-lg font-medium">₹193.20</h3>
+               <h3 className="text-lg font-medium">{props.fare[props.vehicleType]}</h3>
                <p className="text-base text-gray-600">Cash cash</p>
              </div>
            </div>

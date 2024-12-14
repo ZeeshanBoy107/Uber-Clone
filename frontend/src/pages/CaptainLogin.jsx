@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { CaptainDataContext } from '../context/captainContext';
+import { CaptainDataContext } from '../context/CaptainContext';
 
 const CaptainLogin = () => {
   const [email, setEmail] = useState("");
@@ -22,7 +22,7 @@ const CaptainLogin = () => {
 
     if(response.status === 200) {
       setCaptain(response.data.captain);
-      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("captain", response.data.token);
       navigate("/captain-home");
     } else {
       alert("Captain login failed");

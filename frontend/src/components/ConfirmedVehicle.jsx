@@ -13,7 +13,7 @@ const ConfirmedVehicle = (props) => {
         ></i>
       </h5>
       <h2 className="text-2xl font-medium">Confirm your ride</h2>
-      
+
       <div className="flex flex-col justify-between items-center mt-5">
         <img
           className="h-24"
@@ -25,36 +25,34 @@ const ConfirmedVehicle = (props) => {
             <i className="ri-map-pin-2-fill"></i>
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
-              <p className="text-base text-gray-600">
-                Kankariya Talab, Ahmedabad
-              </p>
+              <p className="text-base text-gray-600">{props.pickup}</p>
             </div>
           </div>
           <div className="flex items-center gap-3 p-3 border-b-2">
             <i className="ri-map-pin-2-fill"></i>
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
-              <p className="text-base text-gray-600">
-                Kankariya Talab, Ahmedabad
-              </p>
+              <p className="text-base text-gray-600">{props.destination}</p>
             </div>
           </div>
           <div className="flex items-center gap-3 p-3">
             <i className="ri-currency-line"></i>
             <div>
-              <h3 className="text-lg font-medium">₹193.20</h3>
-              <p className="text-base text-gray-600">
-                Cash cash
-              </p>
+              <h3 className="text-lg font-medium">
+                ₹{props.fare[props.vehicleType]}
+              </h3>
+              <p className="text-base text-gray-600">Cash cash</p>
             </div>
           </div>
         </div>
-        <button 
-        onClick={() => {
-          props.setConfirmedVehicle(false);
-          props.setWait(true);
-        }}
-        className="w-full bg-green-600 text-white font-semibold p-2 rounded-lg mt-5">
+        <button
+          onClick={() => {
+            props.setConfirmedVehicle(false);
+            props.setWait(true);
+            props.createRide();
+          }}
+          className="w-full bg-green-600 text-white font-semibold p-2 rounded-lg mt-5"
+        >
           Confirm
         </button>
       </div>

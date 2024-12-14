@@ -19,8 +19,9 @@ const MainHome = () => {
   const [confirmedVehicle, setConfirmedVehicle] = useState(false);
   const [wait, setWait] = useState(false);
   const [waiting, setWaiting] = useState(false);
-  const [fare, setFare] = useState({})
- 
+  const [fare, setFare] = useState({});
+  const [vehicleType, setVehicleType] = useState(null);
+
   const [pickupSuggestions, setPickupSuggestions] = useState([]);
   const [destinationSuggestions, setDestinationSuggestions] = useState([]);
   const [activeField, setActiveField] = useState(null);
@@ -75,17 +76,37 @@ const MainHome = () => {
         {
           params: { pickup, destination },
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
-      setFare(response.data);
+      setFare(response.data.fare);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
-  console.log(fare);
+  const createRide = async () => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/rides/create`,
+        {
+          pickup,
+          destination,
+          vehicleType,
+        },
+
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -266,16 +287,10 @@ const MainHome = () => {
         className="bg-white fixed w-full z-10 bottom-0 px-2 py-5 translate-y-full"
       >
         <VehiclePanel
+          setVehicleType={setVehicleType}
           setVehiclePanel={setVehiclePanel}
           setConfirmedVehicle={setConfirmedVehicle}
-          suggestions={
-            activeField === "pickup"
-              ? pickupSuggestions
-              : destinationSuggestions
-          }
-          setPickup={setPickup}
-          setDestination={setDestination}
-          activeField={activeField}
+          fare={fare}
         />
       </div>
 
@@ -284,17 +299,26 @@ const MainHome = () => {
         className="bg-white fixed w-full z-10 bottom-0 px-2 py-5 translate-y-full"
       >
         <ConfirmedVehicle
+          pickup={pickup}
+          destination={destination}
+          fare={fare}
+          vehicleType={vehicleType}
           setConfirmedVehicle={setConfirmedVehicle}
           setVehiclePanel={setVehiclePanel}
           setWait={setWait}
+          createRide={createRide}
         />
       </div>
 
       <div
         ref={waitRef}
-        className="bg-white fixed w-full z-10 bottom-0 px-2 py-5 translate-y-full"
+        className="bg-white fixed w-full z-8 bottom-0 px-2 translate-y-full"
       >
         <WaitForDriver
+          pickup={pickup}
+          destination={destination}
+          fare={fare}
+          vehicleType={vehicleType}
           setConfirmedVehicle={setConfirmedVehicle}
           setWait={setWait}
         />

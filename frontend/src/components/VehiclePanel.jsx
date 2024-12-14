@@ -1,6 +1,7 @@
 import React from 'react'
 
 const VehiclePanel = (props) => {
+  
   return (
     <div>
       <h5 className="w-full flex justify-center">
@@ -15,6 +16,7 @@ const VehiclePanel = (props) => {
 
       <div
         onClick={() => {
+          props.setVehicleType("car");
           props.setConfirmedVehicle(true);
           props.setVehiclePanel(false);
         }}
@@ -37,10 +39,12 @@ const VehiclePanel = (props) => {
             Affordable, compact rides
           </p>
         </div>
-        <h2 className="text-xl font-semibold">₹193.20</h2>
+        <h2 className="text-xl font-semibold">₹{props.fare.car}</h2>
       </div>
+
       <div
         onClick={() => {
+          props.setVehicleType("auto");
           props.setConfirmedVehicle(true);
           props.setVehiclePanel(false);
         }}
@@ -64,10 +68,12 @@ const VehiclePanel = (props) => {
             Affordable auto rides
           </p>
         </div>
-        <h2 className="text-xl font-semibold">₹118.70</h2>
+        <h2 className="text-xl font-semibold">₹{props.fare.auto}</h2>
       </div>
+
       <div
         onClick={() => {
+          props.setVehicleType("bike");
           props.setConfirmedVehicle(true);
           props.setVehiclePanel(false);
         }}
@@ -90,7 +96,7 @@ const VehiclePanel = (props) => {
             Affordable bike rides
           </p>
         </div>
-        <h2 className="text-xl font-semibold">₹64.90</h2>
+        <h2 className="text-xl font-semibold">₹{props.fare.bike}</h2>
       </div>
     </div>
   );
