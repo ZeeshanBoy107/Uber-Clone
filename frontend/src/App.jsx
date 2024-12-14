@@ -8,6 +8,8 @@ import MainHome from "./pages/MainHome";
 import UserProtectWrapper from "./pages/UserProtectWrapper";
 import CaptainHome from "./pages/CaptainHome";
 import CaptainProtectWrapper from "./pages/CaptainProtectWrapper";
+import Riding from "./pages/Riding";
+import CaptainRiding from "./pages/CaptainRiding";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <UserLogin />,
+  },
+  {
+    path: "/riding",
+    element: <Riding />,
   },
   {
     path: "/signup",
@@ -29,6 +35,10 @@ const router = createBrowserRouter([
   {
     path: "/captain-signup",
     element: <CaptainSignup />,
+  },
+  {
+    path: "/captain-riding",
+    element: <CaptainRiding />,
   },
   {
     path: "/home",

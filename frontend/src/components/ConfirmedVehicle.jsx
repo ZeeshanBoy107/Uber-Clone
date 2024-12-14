@@ -13,6 +13,7 @@ const ConfirmedVehicle = (props) => {
         ></i>
       </h5>
       <h2 className="text-2xl font-medium">Confirm your ride</h2>
+      
       <div className="flex flex-col justify-between items-center mt-5">
         <img
           className="h-24"
