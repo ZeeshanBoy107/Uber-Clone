@@ -1,4 +1,5 @@
 const axios = require("axios");
+const Captain = require("../models/captain.model");
 
 const getAddressCoordinate = async (address) => {
   if (!address) {
@@ -15,9 +16,13 @@ const getAddressCoordinate = async (address) => {
     const response = await axios.get(url);
     if (response.data.status === "OK") {
       const location = response.data.results[0].geometry.location;
+      if (!location) {
+        throw new Error("Unable to fetch coordinates here");
+      }
+      console.log("location:", location);
       return {
-        lat: location.lat,
         lng: location.lng,
+        ltd: location.lat,
       };
     } else {
       throw new Error("Unable to fetch coordinates here");
@@ -38,8 +43,6 @@ const getDistanceTimeService = async (origin, destination) => {
   const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${encodeURIComponent(
     origin
   )}&destinations=${encodeURIComponent(destination)}&key=${apiKey}`;
-
-
 
   try {
     const response = await axios.get(url);
@@ -84,8 +87,25 @@ const getSuggestionsService = async (input) => {
   }
 };
 
+const getCaptainsInTheRadius = async (lng, ltd, radius) => {
+  if (!lng || !ltd || !radius) {
+    throw new Error("Longitude, latitude and radius are required");
+  }
+  console.log(lng, ltd, radius);
+  const captains = await Captain.find({
+    location: {
+      $geoWithin: {
+        $centerSphere: [[lng, ltd], radius/6371],
+      },
+    },
+  });
+  console.log(captains);
+  return captains;
+}
+
 module.exports = {
   getAddressCoordinate,
   getDistanceTimeService,
-  getSuggestionsService
+  getSuggestionsService,
+  getCaptainsInTheRadius
 };

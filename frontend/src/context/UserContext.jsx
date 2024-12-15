@@ -12,9 +12,28 @@ const UserContext = ({children}) => {
     email: "",
   })
 
+  
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  
+  const updateUser = (userData) => {
+    setUser(userData);
+  };
+
+  const value = {
+    user,
+    setUser,
+    isLoading,
+    setIsLoading,
+    error,
+    setError,
+    updateUser
+  }
+
+
   return (
     <div>
-      <UserDataContext.Provider value={{user, setUser}}>
+      <UserDataContext.Provider value={value}>
         {children}
       </UserDataContext.Provider>
     </div>

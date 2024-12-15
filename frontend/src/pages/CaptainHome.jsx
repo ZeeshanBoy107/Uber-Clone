@@ -1,14 +1,52 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import CaptainDetails from "../components/CaptainDetails";
 import RidePopUp from "../components/RidePopUp";
+import { CaptainDataContext } from "../context/CaptainContext";
+import { useContext } from "react";
+import { SocketContext } from "../context/SocketContext";
 
 const CaptainHome = () => {
-  const [ridePopupPanel, setRidePopupPanel] = useState(true);
+  const [ridePopupPanel, setRidePopupPanel] = useState(false);
+  const [ride, setRide] = useState(null)
   const ridePopupRef = useRef(null);
 
+  const { captain } = useContext(CaptainDataContext);
+  const { socket } = useContext(SocketContext);
+
+  useEffect(() => {
+    socket.emit("join", {
+      userId: captain._id,
+      userType: "captain",
+    });
+    const updateLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          socket.emit("update-location-captain", {
+            userId: captain._id,
+            location: {
+              lng: position.coords.longitude,
+              ltd: position.coords.latitude,
+            },
+          });
+        });
+      }
+    };
+
+    const locationInterval = setInterval(updateLocation, 10000);
+    updateLocation();
+
+    // return () => clearInterval(locationInterval)
+  }, []);
+
+  socket.on("new-ride", (data) => {
+    console.log(data);
+    console.log("new ride");
+    setRidePopupPanel(true);
+    setRide(data)
+  });
   useGSAP(() => {
     if (ridePopupPanel) {
       gsap.to(ridePopupRef.current, {
@@ -56,7 +94,9 @@ const CaptainHome = () => {
         ref={ridePopupRef}
         className="p-8 z-10 fixed bottom-0 w-screen bg-white translate-y-full"
       >
-        <RidePopUp setRidePopupPanel={setRidePopupPanel}/>
+        <RidePopUp 
+        ride={ride}
+        setRidePopupPanel={setRidePopupPanel}/>
       </div>
     </div>
   );

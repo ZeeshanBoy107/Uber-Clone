@@ -1,5 +1,5 @@
 import { gsap } from "gsap";
-import React, { useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import "remixicon/fonts/remixicon.css";
 import LocationSearchPanel from "../components/LocationSearchPanel";
@@ -8,6 +8,8 @@ import ConfirmedVehicle from "../components/ConfirmedVehicle";
 import WaitForDriver from "../components/WaitForDriver";
 import WaitingForDriver from "../components/WaitingForDriver";
 import axios from "axios";
+import { SocketContext } from "../context/SocketContext";
+import { UserDataContext } from "../context/UserContext"
 
 const MainHome = () => {
   const [show, setShow] = useState(false);
@@ -25,11 +27,32 @@ const MainHome = () => {
   const [pickupSuggestions, setPickupSuggestions] = useState([]);
   const [destinationSuggestions, setDestinationSuggestions] = useState([]);
   const [activeField, setActiveField] = useState(null);
+  const [vehicleFound, setVehicleFound] = useState(null)
 
   const vehiclePanelRef = useRef(null);
   const confirmedVehicleRef = useRef(null);
   const waitRef = useRef(null);
   const waitingRef = useRef(null);
+
+  const { socket } = useContext(SocketContext);
+  const { user } = useContext(UserDataContext)
+
+  useEffect(() => {
+    console.log(user._id)
+    socket.emit("join", { userType: "user", userId: user.user?._id})
+  }, [user])
+
+  socket.on("ride-confirmed", (ride) => {
+    setVehicleFound(false);
+    setWaiting(true);
+    setRide(ride);
+  });
+
+  socket.on("ride-started", (ride) => {
+    console.log("ride");
+    setWaiting(false);
+    navigate("/riding", { state: { ride } }); // Updated navigate to include ride data
+  });
 
   const handlePickupChange = async (e) => {
     setPickup(e.target.value);
